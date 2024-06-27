@@ -34,6 +34,20 @@ public class Wrappers {
         }
     }
 
+    public static void sendKeysWrapper(WebDriver driver, By locator, String textToSend) {
+        System.out.println("Sending Keys");
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            WebElement textInput = driver.findElement(locator);
+            textInput.clear();
+            textInput.sendKeys(textToSend);
+            textInput.sendKeys(Keys.ENTER);
+        } catch (Exception e) {
+            System.out.println("Exception Occured! " + e.getMessage());
+        }
+    }
+
     public static void getElementInView(WebDriver driver, WebElement element) {
         // WebElement element = driver.findElement(locator);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
@@ -50,6 +64,15 @@ public class Wrappers {
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         String text = element.getText().trim();
         return text;
+    }
+
+    public static String findElementAndPrint(WebDriver driver, By locator, int elementNo){
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        WebElement we = driver.findElements(locator).get(elementNo);
+        // Return the result
+        String txt = we.getText();
+        return txt;
     }
 
     public static String getLastElemetTextInList(WebDriver driver, By locator) {

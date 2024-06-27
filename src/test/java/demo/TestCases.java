@@ -92,7 +92,7 @@ public class TestCases extends ExcelDataProvider { // Lets us read the data
     @Test
     public void testCase03() throws InterruptedException {
         Boolean status;
-        Wrappers.logStatus("Start TestCase", "Test Case 1:", "DONE");
+        Wrappers.logStatus("Start TestCase", "Test Case 3:", "DONE");
         driver.get("https://www.youtube.com/");
         status = driver.getCurrentUrl().equalsIgnoreCase("https://www.youtube.com/");
         Assert.assertTrue(status, "Landing on You tube home page failed");
@@ -116,12 +116,14 @@ public class TestCases extends ExcelDataProvider { // Lets us read the data
 
         SoftAssert sa = new SoftAssert();
         sa.assertTrue(Wrappers.convertToNumericValue(splitTotalTracks[0])<=50,"Tracks are more than 50");
+
+        Wrappers.logStatus("End TestCase", "Test Case 3:", "DONE");
     }
 
     @Test
     public void testCase04(){
         Boolean status;
-        Wrappers.logStatus("Start TestCase", "Test Case 1:", "DONE");
+        Wrappers.logStatus("Start TestCase", "Test Case 4:", "DONE");
         driver.get("https://www.youtube.com/");
         status = driver.getCurrentUrl().equalsIgnoreCase("https://www.youtube.com/");
         Assert.assertTrue(status, "Landing on You tube home page failed");
@@ -166,6 +168,23 @@ public class TestCases extends ExcelDataProvider { // Lets us read the data
             System.out.println("Total likes count of top 3 latest news: "+numberOfVotes);
         }
         Wrappers.logStatus("End TestCase", "Test Case 4:", "DONE");
+    }
+
+    @Test(dataProvider = "excelData")
+    public void testCase05(String searchWord) throws InterruptedException {
+        Wrappers.logStatus("Start TestCase", "Test Case 5:", "DONE");
+        driver.get("https://www.youtube.com/");
+        Wrappers.sendKeysWrapper(driver, By.xpath("//input[@id='search']"), searchWord);
+        //Thread.sleep((new java.util.Random().nextInt(3) + 2) * 1000);
+        long tally = 0;
+        int iter = 0;
+        while(tally<100000000){
+            String res =  Wrappers.findElementAndPrint(driver, By.xpath("(//div[@class='style-scope ytd-video-renderer' and @id='meta']//span[@class='inline-metadata-item style-scope ytd-video-meta-block'][1])"),iter);
+            res = res.split(" ")[0];
+            tally += Wrappers.convertToNumericValue(res);
+            iter++;
+        }
+        Wrappers.logStatus("Start TestCase", "Test Case 5:", "DONE");
     }
 
 
